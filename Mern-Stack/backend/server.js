@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const cors = require("cors");
 
 const mainRoute = require("./routes");
 
@@ -17,6 +18,7 @@ const connect = async() =>{
     }
 }
 app.use(express.json());
+app.use(cors());
 app.use("/api",mainRoute)
 
 app.get("/", (req, res) => {
