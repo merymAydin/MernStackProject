@@ -14,7 +14,7 @@ const UpdateCategory = () => {
       const response = await fetch(
         `http://localhost:5000/api/categories/${categoryId}`
       );
-      if (!response.ok) {
+      if (response.ok) {
         const data = await response.json();
         if (data) {
           form.setFieldsValue({
@@ -25,6 +25,8 @@ const UpdateCategory = () => {
         } else {
           console.log("Category not found");
         }
+      } else {
+        console.log("Failed to fetch category:", response.statusText);
       }
     } catch (error) {
       console.log("Error fetching category:", error);

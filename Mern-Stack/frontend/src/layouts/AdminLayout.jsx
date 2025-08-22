@@ -21,8 +21,8 @@ const AdminLayout = ({ children }) => {
       { key: '2-2', label: 'Add Category' , onClick : () => navigate('/admin/categories/create') }
     ]},
     { key: '3', icon: <ShopOutlined />, label: 'Product',children: [
-      { key: '3-1', label: 'List Products' },
-      { key: '3-2', label: 'Add Product' }
+      { key: '3-1', label: 'List Products', onClick: () => navigate('/admin/products') },
+      { key: '3-2', label: 'Add Product' , onClick: () => navigate('/admin/products/create') }
     ] },
     { key: '4', icon: <UserOutlined />, label: 'Users', children: [
       { key: '4-1', label: 'List Users' },
@@ -45,7 +45,7 @@ const AdminLayout = ({ children }) => {
         </Sider>
         <Layout>
           <Header style={{ color: "#fff" }}>Mern Stack</Header>
-          <Content>{children}</Content>
+          <Content style={{ height: "100vh" }}>{children}</Content>
           <Footer style={{ backgroundColor: "#001529", color: "#fff" }}>
             All Rights Reserved
           </Footer>
