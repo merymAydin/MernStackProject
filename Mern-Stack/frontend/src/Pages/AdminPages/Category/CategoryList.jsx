@@ -1,47 +1,12 @@
 import { Button, Space, Table } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { CategoryContext } from '../../../Contexts/CategoryProvider';
 
 const CategoryList = () => {
-  const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    getCategories();
-  }, [categoryData]);
-
-  const getCategories = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/categories');
-      if (response.ok) {
-        const data = await response.json();
-        setCategoryData(data);
-      }else{
-        console.error("Failed to fetch categories");
-      }
-      
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      
-    }
-  }
-  const deleteCategory = async (categoryId) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/categories`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ _id: categoryId })
-      });
-      if (response.ok) {
-        navigate('/admin/categories');
-      } else {
-        console.error("Failed to delete category");
-      }
-    } catch (error) {
-      console.error("Error deleting category:", error);
-    }
-  }
+  const {  deleteCategory,categories } = useContext(CategoryContext);
+  
   const columns = [
     {
       title: 'Image',
@@ -75,7 +40,7 @@ const CategoryList = () => {
       <h2>Categories</h2>
       <Table 
       columns={columns} 
-      dataSource={categoryData} 
+      dataSource={categories} 
       rowKey={(record) => record._id}
       pagination={{pageSize:10}} 
       scroll={{ y: 600 }}/>

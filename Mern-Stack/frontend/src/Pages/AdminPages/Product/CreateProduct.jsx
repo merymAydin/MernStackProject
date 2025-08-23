@@ -1,11 +1,31 @@
-import { Form, Input,Checkbox, Button} from 'antd'
-import React from 'react'
+import { Form, Input,Checkbox, Button, Select} from 'antd'
+import React, { useEffect, useState } from 'react'
 
 const { TextArea } = Input;
 
 const CreateProduct = () => {
-    const [form] = Form.useForm();
-    const colors = ["Pink", "Blue", "Green","Black","White","Gray","Red"];
+  const [categories, setCategories] = useState([]);
+  const [form] = Form.useForm();
+
+  const getCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/categories');
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data);
+      } else {
+        console.log("Error fetching categories");
+      }
+    } catch (error) {
+      console.log("Error fetching categories:", error);
+    }
+  }
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const colors = ["Pink", "Blue", "Green","Black","White","Gray","Red"];
   return (
     <div>
       <h2 style={{marginBottom: '10px'}}>Create Product</h2>
@@ -27,6 +47,17 @@ const CreateProduct = () => {
         </Form.Item>
         <Form.Item name="stock" label=" quantity">
           <Input placeholder='Enter product stock' />
+        </Form.Item>
+        <Form.Item label="Category" name="category">
+          <Select placeholder="Select a category">
+            {
+              categories.map((category) => (
+                <Select.Option key={category._id} value={category._id}>
+                  {category.name}
+                </Select.Option>
+              ))
+            }
+          </Select>
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">Create Product</Button>
