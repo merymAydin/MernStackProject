@@ -4,44 +4,16 @@ import { useParams } from "react-router-dom";
 import { CategoryContext } from "../../../Contexts/CategoryProvider";
 
 const UpdateCategory = () => {
-
-  const {updateCategory} = useContext(CategoryContext);
+  const {updateCategory,getByCategory} = useContext(CategoryContext);
   const params = useParams();
   const categoryId = params.id;
   const [form] = Form.useForm();
 
-  const fillForm = (data) => {
-    form.setFieldsValue({
-            name: data.name,
-            image: data.image,
-            _id: data._id
-    });
-  }
-
-  const getByCategory = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/categories/${id}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        if (data) {
-          return data;
-        } else {
-          console.log("Category not found");
-        }
-      } else {
-        console.log("Failed to fetch category:", response.statusText);
-      }
-    } catch (error) {
-      console.log("Error fetching category:", error);
-    }
-  };
 
    useEffect(() => {
     getByCategory(categoryId);
-  }, []);
-  
+    }, [categoryId]);
+
   return (
     <div>
       <Form

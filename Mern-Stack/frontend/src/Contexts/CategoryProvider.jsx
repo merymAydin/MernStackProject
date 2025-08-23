@@ -83,18 +83,42 @@ const CategoryProvider = ({children}) => {
       
     }
   };
+   const getByCategory = async(id,frm) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/categories/${id}`);
+      if(response.ok){
+        const data = await response.json();
+        if(data){
+          frm.setFieldsValue({
+            name : data.name,
+            image : data.image,
+            _id : id
+          });
+        }else{
+          console.log("Category not found");
+        }
+      }
+    } catch (error) {
+      console.log("Error fetching category: ", error);
+    }
+  }
 
-
+  
+  
    useEffect(() => {
     getCategories();
   }, []);
+  
+
+
     const values = { 
         categories, 
         setCategories,
         getCategories,
         deleteCategory,
         createCategory,
-        updateCategory
+        updateCategory,
+        getByCategory
     };
     return (
       <CategoryContext.Provider value={values}>

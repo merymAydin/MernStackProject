@@ -1,25 +1,10 @@
 import { Button, Space, Table } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
+import { ProductContext } from '../../../Contexts/ProductProvider';
 
 const ProductList = () => {
-    const [dataSource, setDataSource] = useState([]);
-    const getProducts = async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/products`);
-            if (response.ok) {
-                const data = await response.json();
-                setDataSource(data);
-            }else{
-                console.error('Error fetching products');
-            }
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    };
+    const { products, deleteProduct } = useContext(ProductContext);
 
-    useEffect(() => {
-        getProducts();
-    }, []);
     const columns = [
         {
             title: 'Image',
@@ -71,7 +56,7 @@ const ProductList = () => {
             render: (_, record) => (
                 <Space size="middle">
                     <Button color='cyan' variant='solid' onClick={() => {record}}>Edit</Button>
-                    <Button color='red' variant='solid' onClick={() => {}}>Delete</Button>
+                    <Button color='red' variant='solid' onClick={() => deleteProduct(record._id)}>Delete</Button>
                 </Space>
             )
         }
@@ -81,7 +66,7 @@ const ProductList = () => {
       <h2>Products</h2>
       <Table 
       columns={columns} 
-      dataSource={dataSource} 
+      dataSource={products} 
       rowKey={(record) => record._id}
       pagination={{pageSize:10}} 
       scroll={{ y: 600 }}/>

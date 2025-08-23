@@ -86,13 +86,13 @@ const UpdateProduct = () => {
         <Form.Item label="Description" name="description">
           <TextArea rows={4} />
         </Form.Item>
-        <Form.Item label="Colors (comma separated)" name="colors">
+        <Form.Item label="Colors" name="colors">
           <Input placeholder="red,blue,green" />
         </Form.Item>
         <Form.Item label="Category" name="category">
           <Input />
         </Form.Item>
-        <Form.Item label="Images (comma separated paths)" name="images">
+        <Form.Item label="Images" name="images">
           <Input placeholder="/path/to/image1.jpg,/path/to/image2.jpg" />
         </Form.Item>
         <Form.Item>
