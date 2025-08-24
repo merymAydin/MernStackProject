@@ -1,9 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const ProductContext = createContext();
 
 const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
 
   const getProducts = async () => {
         try {
@@ -60,6 +63,25 @@ const ProductProvider = ({ children }) => {
         }
     };
 
+    const createProduct = async (values) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/products`, {
+                method: "POST",
+                headers: {
+                    "content-Type": "application/json"
+                },
+                body: JSON.stringify(values)
+            });
+            if (response.ok) {
+                navigate('/admin/products');
+            } else {
+                console.error('Error creating product');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         getProducts();
     }, []);
@@ -68,7 +90,8 @@ const ProductProvider = ({ children }) => {
         products,
         getProducts,
         deleteProduct,
-        getByIdProduct
+        getByIdProduct,
+        createProduct
     }
   return (
     <ProductContext.Provider value={values}>

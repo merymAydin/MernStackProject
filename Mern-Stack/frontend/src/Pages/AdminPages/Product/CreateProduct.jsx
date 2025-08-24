@@ -1,35 +1,22 @@
 import { Form, Input,Checkbox, Button, Select} from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useContext } from 'react';
+import {CategoryContext} from '../../../Contexts/CategoryProvider';
+import { ProductContext } from '../../../Contexts/ProductProvider';
 
 const { TextArea } = Input;
 
 const CreateProduct = () => {
-  const [categories, setCategories] = useState([]);
+  const {categories} = useContext(CategoryContext);
+  const {createProduct}= useContext(ProductContext);
   const [form] = Form.useForm();
 
-  const getCategories = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/categories');
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
-      } else {
-        console.log("Error fetching categories");
-      }
-    } catch (error) {
-      console.log("Error fetching categories:", error);
-    }
-  }
 
-  useEffect(() => {
-    getCategories();
-  }, []);
 
   const colors = ["Pink", "Blue", "Green","Black","White","Gray","Red"];
   return (
     <div>
       <h2 style={{marginBottom: '10px'}}>Create Product</h2>
-      <Form form={form} layout="vertical" onFinish={() => {}} initialValues={{colors : ["Black","White","Gray"]}}>
+      <Form form={form} layout="vertical" onFinish={createProduct} initialValues={{colors : ["Black","White","Gray"]}}>
         <Form.Item label="Product Name" name="name" rules={[{ required: true, message: 'Please enter product name' }]}>
           <Input placeholder='Enter product name' />
         </Form.Item>

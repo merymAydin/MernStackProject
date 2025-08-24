@@ -5,6 +5,8 @@ import { ProductContext } from '../../../Contexts/ProductProvider';
 const ProductList = () => {
     const { products, deleteProduct } = useContext(ProductContext);
 
+
+
     const columns = [
         {
             title: 'Image',
