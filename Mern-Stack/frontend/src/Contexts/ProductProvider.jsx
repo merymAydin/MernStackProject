@@ -6,9 +6,9 @@ const ProductContext = createContext();
 const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-
-  const getProducts = async () => {
+    const getProducts = async () => {
         try {
             const response = await fetch(`http://localhost:5000/api/products`);
             if (response.ok) {
@@ -101,9 +101,27 @@ const ProductProvider = ({ children }) => {
         }
     }
 
+    const getProductsByCategory = async (selectedCategory) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/products/category/${selectedCategory}`);
+            if (response.ok) {
+                const data = await response.json();
+                setProducts(data);
+            } else {
+                console.error('Error fetching products by category');
+            }
+        } catch (error) {
+            console.error('Error fetching products by category:', error);
+        }
+    };
+
     useEffect(() => {
         getProducts();
-    }, [navigate]);
+    }, []);
+
+     useEffect(() => {
+         getProductsByCategory(selectedCategory);
+     }, [selectedCategory]);
 
     const values = {
         products,
@@ -111,7 +129,9 @@ const ProductProvider = ({ children }) => {
         deleteProduct,
         getByIdProduct,
         createProduct,
-        updateProduct
+        updateProduct,
+        getProductsByCategory,
+        setSelectedCategory
     }
   return (
     <ProductContext.Provider value={values}>

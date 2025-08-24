@@ -19,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/category/:id" element={<ProductsPage />} />
           <Route path='/admin/'>
             <Route index element={<DashBoard/>} />
             <Route path='categories' element={<CategoryList />} />

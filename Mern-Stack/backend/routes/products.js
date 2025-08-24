@@ -73,4 +73,20 @@ router.delete('/:productid', async (req, res) => {
   }
 });
 
+//Get by category product
+
+router.get("/category/:id",async(req,res) => {
+    try {
+        const categoryId  = req.params.id;
+        const products = await Product.find();
+        const productsByCategory = products.filter(product => product.category == categoryId);
+        res.status(200).json(productsByCategory);
+    } catch (error) {
+         console.log(error);
+        res.status(500).json({error : "Failed to fetch products by category : "})
+    }
+})
+
+
+
 module.exports = router;
