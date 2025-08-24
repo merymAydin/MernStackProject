@@ -1,47 +1,52 @@
 import { Button, Space, Table } from 'antd'
 import React, { useContext } from 'react'
 import { ProductContext } from '../../../Contexts/ProductProvider';
+import { useNavigate } from 'react-router-dom';
 
 const ProductList = () => {
     const { products, deleteProduct } = useContext(ProductContext);
+const navigate = useNavigate();
 
 
-
-    const columns = [
+ const columns = [
         {
-            title: 'Image',
-            dataIndex: 'image',
-            key : "image",
-            render : (img,record) => (<img src={`/${record.images[0]}`} alt="product image" style={{ width: '50px'}} />)
+            title : "Product Image",
+            dataIndex : "images",
+            key : "images",
+            render : (img,record) => (<img src={`${record.images[0]}`} alt='Product image' style={{width:"50%"}} />)
         },
         {
-            title: 'Product name',
-            dataIndex: 'name',
-            key: 'name',
-        },{
-            title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-        },{
-            title: 'Product Description',
-            dataIndex: 'description',
-            key: 'description',
-        },{
-            title: 'Product colors',
-            dataIndex: 'colors',
-            key: 'colors',
+            title : "Product Name",
+            dataIndex : "name",
+            key:"name"
+        },
+        {
+            title : "Price",
+            dataIndex : "price",
+            key : "price"
+        },
+        {
+            title : "Product Description",
+            dataIndex : "description",
+            key : "description"
+        },
+        {
+            title : "Product Colors",
+            dataIndex : "colors",
+            key : "colors",
             render : (colors) => (
-                <div style={{display:"flex", flexWrap:"wrap", width:"50px"}} >
+                <div style={{display:"flex", flexWrap:"wrap", width : "100px"}}>
                     {
                         colors.map((item,index) => (
-                            <div key={index} style={{
+                            <div key={index} 
+                            style={{
                                 width:"20px",
-                                height:"20px", 
-                                borderRadius:"50%",
-                                backgroundColor:item,
-                                marginRight: "5px",
+                                height : "20px",
+                                borderRadius : "50%",
+                                backgroundColor : item,
+                                marginRight : "5px",
                                 border : "1px solid silver",
-                                marginBottom: "5px",
+                                marginBottom : "5px"
                             }}></div>
                         ))
                     }
@@ -49,31 +54,34 @@ const ProductList = () => {
             )
         },
         {
-            title: 'Stock',
-            dataIndex: 'stock',
-            key: 'stock'
-        },{
-            title: 'Actions',
-            key: 'actions',
-            render: (_, record) => (
+            title : "Stock Quantity",
+            dataIndex : "stock",
+            key : "stock"
+        },
+        {
+            title : "Actions",
+            key : "action",
+            render : (_,record) => (
                 <Space size="middle">
-                    <Button color='cyan' variant='solid' onClick={() => {record}}>Edit</Button>
-                    <Button color='red' variant='solid' onClick={() => deleteProduct(record._id)}>Delete</Button>
+                    <Button color='cyan' variant="solid" onClick={() => navigate(`/admin/products/update/${record._id}`)}>Update</Button>
+                    <Button color='danger' variant="solid" onClick={() => deleteProduct(record._id)}>Delete</Button>
                 </Space>
             )
         }
+
     ]
   return (
     <div>
-      <h2>Products</h2>
-      <Table 
-      columns={columns} 
-      dataSource={products} 
-      rowKey={(record) => record._id}
-      pagination={{pageSize:10}} 
-      scroll={{ y: 600 }}/>
+        <h2>Products</h2>
+        <Table 
+        columns={columns} 
+        dataSource={products} 
+        rowKey={(record) => record._id} 
+        pagination={{ pageSize: 10 }}
+        scroll={{ y: 600 }}/>
     </div>
   )
 }
+
 
 export default ProductList

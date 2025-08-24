@@ -82,16 +82,36 @@ const ProductProvider = ({ children }) => {
         }
     };
 
+    const updateProduct = async (values) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/products/${values._id}`, {
+                method: "PUT",
+                headers: {
+                    "content-Type": "application/json"
+                },
+                body: JSON.stringify(values)
+            });
+            if (response.ok) {
+                navigate('/admin/products');
+            } else {
+                console.error('Error updating product');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         getProducts();
-    }, []);
+    }, [navigate]);
 
     const values = {
         products,
         getProducts,
         deleteProduct,
         getByIdProduct,
-        createProduct
+        createProduct,
+        updateProduct
     }
   return (
     <ProductContext.Provider value={values}>

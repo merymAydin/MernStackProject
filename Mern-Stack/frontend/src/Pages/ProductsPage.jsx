@@ -1,7 +1,6 @@
 import React from 'react'
 
-const HomePage = () => {
-  
+const ProductsPage = () => {
   return (
     <div>
       
@@ -9,4 +8,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default ProductsPage

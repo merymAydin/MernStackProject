@@ -1,106 +1,66 @@
-import { Button, Form, Input, InputNumber, Select } from "antd";
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Button, Form, Input, Select,Checkbox } from "antd";
+import React, { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { CategoryContext } from "../../../Contexts/CategoryProvider";
+import { ProductContext } from "../../../Contexts/ProductProvider";
 
-const { Option } = Select;
+
 const { TextArea } = Input;
 
 const UpdateProduct = () => {
-  const navigate = useNavigate();
+  const {categories} = useContext(CategoryContext)
+  const {updateProduct, getByIdProduct} = useContext(ProductContext);
   const params = useParams();
   const productId = params.id;
   const [form] = Form.useForm();
 
-  const getProduct = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/products/${productId}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        if (data) {
-          form.setFieldsValue({
-            name: data.name,
-            price: data.price,
-            description: data.description,
-            colors: data.colors,
-            category: data.category,
-            images: data.images,
-            _id: productId,
-          });
-        } else {
-          console.log("Product not found");
-        }
-      } else {
-        console.log("Failed to fetch product:", response.statusText);
-      }
-    } catch (error) {
-      console.log("Error fetching product:", error);
-    }
-  };
+    useEffect(() => {
+    getByIdProduct(productId,form);
+  },[productId])
+  const colors = ["Black","White","Grey","Red","Green","Brown","Blue","Orange","Yellow"];
 
-  useEffect(() => {
-    getProduct();
-  }, []);
-
-  const handleUpdateProduct = async (values) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/products/${productId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      );
-      if (response.ok) {
-        navigate("/admin/products");
-      } else {
-        console.log("Error updating product:", response.statusText);
-      }
-    } catch (error) {
-      console.log("Error updating product:", error);
-    }
-  };
+  
 
   return (
     <div>
-      <h2>Update Product</h2>
-      <Form
-        layout="vertical"
-        form={form}
-        initialValues={{ layout: "vertical" }}
-        onFinish={handleUpdateProduct}
-      >
-        <Form.Item label="Product ID" name="_id" style={{ display: "none" }}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Product Name" name="name" rules={[{ required: true, message: 'Please input product name!' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="Price" name="price" rules={[{ required: true, message: 'Please input price!' }]}>
-          <InputNumber min={0} style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item label="Description" name="description">
-          <TextArea rows={4} />
-        </Form.Item>
-        <Form.Item label="Colors" name="colors">
-          <Input placeholder="red,blue,green" />
-        </Form.Item>
-        <Form.Item label="Category" name="category">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Images" name="images">
-          <Input placeholder="/path/to/image1.jpg,/path/to/image2.jpg" />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Update Product
-          </Button>
-        </Form.Item>
-      </Form>
+        <h2 style={{marginBottom : "10px"}}>Update Product</h2>
+        <Form form={form} layout='vertical' onFinish={updateProduct} initialValues={{colors:["Black","White","Red"]}} >
+            <Form.Item label="Product ID" name="_id" style={{display:"none"}}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Product Name" name="name" rules={[{required : true, message : "Please enter product name..."}]}>
+                <Input placeholder='Enter product name...' />
+            </Form.Item>
+            <Form.Item label="Product Images" name="images"  rules={[{required : true, message : "Please enter product images..."}]}>
+                <TextArea rows={4} />
+            </Form.Item>
+            <Form.Item label="Product Price" name="price"  rules={[{required : true, message : "Please enter product price..."}]}>
+                <Input placeholder='Enter product price...' />
+            </Form.Item>
+            <Form.Item label="Product Description" name="description" >
+                <TextArea rows={4} />
+            </Form.Item>
+            <Form.Item name="colors" label="Product Colors">
+                <Checkbox.Group options={colors} />
+            </Form.Item>
+            <Form.Item name="stock" label="Stock Quantity">
+                <Input placeholder='Enter stock quantity...' />
+            </Form.Item>
+            <Form.Item label="Category" name="category">
+                <Select placeholder="Select category...">
+                {
+                    categories.map(category => (
+                        <Select.Option key={category._id} value={category._id}>
+                        {category.name}
+                        </Select.Option>
+                    ))
+                }
+                </Select>
+            </Form.Item>
+            <Form.Item>
+                <Button type='primary' htmlType='submit'>Update Product</Button>
+            </Form.Item>
+        </Form>
     </div>
   );
 };
