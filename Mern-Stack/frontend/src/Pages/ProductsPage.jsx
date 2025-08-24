@@ -1,9 +1,10 @@
 import React from 'react'
+import ProductList from '../Components/products/ProductList'
 
 const ProductsPage = () => {
   return (
-    <div>
-      
+    <div className="page-box">
+        <ProductList/>
     </div>
   )
 }
