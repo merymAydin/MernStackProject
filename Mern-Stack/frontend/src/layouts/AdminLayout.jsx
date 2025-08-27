@@ -45,7 +45,7 @@ const AdminLayout = ({ children }) => {
         </Sider>
         <Layout>
           <Header style={{ color: "#fff" }}>Mern Stack</Header>
-          <Content style={{ height: "100vh" }}>{children}</Content>
+          <Content style={{ height: "auto", overflowY: "auto" }}>{children}</Content>
           <Footer style={{ backgroundColor: "#001529", color: "#fff" }}>
             All Rights Reserved
           </Footer>
